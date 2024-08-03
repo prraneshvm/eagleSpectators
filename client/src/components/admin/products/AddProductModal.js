@@ -13,6 +13,8 @@ const AddProductDetail = ({ categories }) => {
   const [fData, setFdata] = useState({
     pName: "",
     pDescription: "",
+    pOverview: "",
+    dataSheetLink: "",
     pStatus: "Active",
     pImage: null, // Initial value will be null or empty array
     pCategory: "",
@@ -54,6 +56,8 @@ const AddProductDetail = ({ categories }) => {
           ...fData,
           pName: "",
           pDescription: "",
+          pOverview: "",
+          dataSheetLink: "",
           pImage: "",
           pStatus: "Active",
           pCategory: "",
@@ -68,6 +72,8 @@ const AddProductDetail = ({ categories }) => {
             ...fData,
             pName: "",
             pDescription: "",
+            pOverview: "",
+            dataSheetLink: "",
             pImage: "",
             pStatus: "Active",
             pCategory: "",
@@ -174,6 +180,25 @@ const AddProductDetail = ({ categories }) => {
               </div>
             </div>
             <div className="flex flex-col space-y-2">
+              <label htmlFor="description">Product Overview *</label>
+              <textarea
+                value={fData.pOverview}
+                onChange={(e) =>
+                  setFdata({
+                    ...fData,
+                    error: false,
+                    success: false,
+                    pOverview: e.target.value,
+                  })
+                }
+                className="px-4 py-2 border focus:outline-none"
+                name="overview"
+                id="overview"
+                cols={5}
+                rows={2}
+              />
+            </div>
+            <div className="flex flex-col space-y-2">
               <label htmlFor="description">Product Description *</label>
               <textarea
                 value={fData.pDescription}
@@ -190,6 +215,45 @@ const AddProductDetail = ({ categories }) => {
                 id="description"
                 cols={5}
                 rows={2}
+              />
+            </div>
+            <div className="flex flex-col space-y-2">
+              <label htmlFor="description">Datatsheet Link *</label>
+              <textarea
+                value={fData.dataSheetLink}
+                onChange={(e) =>
+                  setFdata({
+                    ...fData,
+                    error: false,
+                    success: false,
+                    dataSheetLink: e.target.value,
+                  })
+                }
+                className="px-4 py-2 border focus:outline-none"
+                name="datasheet"
+                id="datasheet"
+                cols={3}
+                rows={1}
+              />
+            </div>
+
+            <div className="flex flex-col space-y-2">
+              <label htmlFor="description">Brand *</label>
+              <textarea
+                value={fData.pBrand}
+                onChange={(e) =>
+                  setFdata({
+                    ...fData,
+                    error: false,
+                    success: false,
+                    pBrand: e.target.value,
+                  })
+                }
+                className="px-4 py-2 border focus:outline-none"
+                name="Brand"
+                id="pBrand"
+                cols={3}
+                rows={1}
               />
             </div>
             {/* Most Important part for uploading multiple image */}

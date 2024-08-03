@@ -42,13 +42,15 @@ class Product {
   }
 
   async postAddProduct(req, res) {
-    let { pName, pDescription, pPrice, pQuantity, pCategory, pOffer, pStatus } =
+    let { pName, pDescription, pOverview, dataSheetLink, pPrice, pQuantity, pCategory, pOffer, pStatus } =
       req.body;
     let images = req.files;
     // Validation
     if (
       !pName |
       !pDescription |
+      !pOverview |
+      !dataSheetLink |
       !pPrice |
       !pQuantity |
       !pCategory |
@@ -66,9 +68,9 @@ class Product {
       });
     }
     // Validate Images
-    else if (images.length !== 2) {
+    else if (images.length !== 1) {
       Product.deleteImages(images, "file");
-      return res.json({ error: "Must need to provide 2 images" });
+      return res.json({ error: "Must need to provide 1 images" });
     } else {
       try {
         let allImages = [];
@@ -79,6 +81,8 @@ class Product {
           pImages: allImages,
           pName,
           pDescription,
+          pOverview,
+          dataSheetLink,
           pPrice,
           pQuantity,
           pCategory,
@@ -100,6 +104,8 @@ class Product {
       pId,
       pName,
       pDescription,
+      pOverview,
+      dataSheetLink,
       pPrice,
       pQuantity,
       pCategory,
@@ -114,6 +120,8 @@ class Product {
       !pId |
       !pName |
       !pDescription |
+      !pOverview |
+      !dataSheetLink |
       !pPrice |
       !pQuantity |
       !pCategory |
@@ -129,13 +137,15 @@ class Product {
       });
     }
     // Validate Update Images
-    else if (editImages && editImages.length == 1) {
+    else if (editImages && editImages.length > 0) {
       Product.deleteImages(editImages, "file");
-      return res.json({ error: "Must need to provide 2 images" });
+      return res.json({ error: "Must need to provide 1 images" });
     } else {
       let editData = {
         pName,
         pDescription,
+        pOverview,
+        dataSheetLink,
         pPrice,
         pQuantity,
         pCategory,

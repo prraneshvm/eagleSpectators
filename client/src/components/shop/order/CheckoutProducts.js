@@ -321,7 +321,7 @@ export const CheckoutComponent = (props) => {
                     type="number"
                     id="phone"
                     className="border px-4 py-2"
-                    placeholder="+880"
+                    placeholder="+91"
                   />
                 </div>
 
@@ -350,7 +350,7 @@ export const CheckoutComponent = (props) => {
 
                 {state?.paymentType !== "paycall" && (
                   <>
-                    <div>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                       <QrPay />
                     </div>
 

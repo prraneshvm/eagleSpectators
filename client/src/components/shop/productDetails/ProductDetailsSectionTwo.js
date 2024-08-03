@@ -68,12 +68,70 @@ const ProductDetailsSectionTwo = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const divStyle = {
+    background: "#303031",
+    padding: "10px 20px",
+    color: "#fff",
+    textAlign: "center",
+    cursor: "pointer",
+    textTransform: "uppercase",
+    transition: "transform 0.3s, background-color 0.9s",
+  };
+
+  const hoverStyle = {
+    transform: "scale(1.05)",
+    backgroundColor: "#404041", // Slightly lighter shade on hover
+  };
+
+  const handleMouseEnter = (e) => {
+    e.target.style.transform = hoverStyle.transform;
+    e.target.style.backgroundColor = hoverStyle.backgroundColor;
+  };
+
+  const handleMouseLeave = (e) => {
+    e.target.style.transform = "scale(1)";
+    e.target.style.backgroundColor = divStyle.background;
+  };
+
   return (
     <Fragment>
       <section className="m-4 md:mx-12 md:my-8">
         <Menu />
         {data.menu ? (
-          <div className="mt-6">{singleProduct.pDescription}</div>
+          <div className="mt-6">
+            {singleProduct.pDescription}
+            {/* <ul style={{ listStyleType: "disc", paddingLeft: "20px" }}>
+              {singleProduct.pDescription.split(".").map((feature, index) => {
+                const trimmedFeature = feature.trim();
+                return trimmedFeature ? (
+                  <li key={index}>{trimmedFeature}</li>
+                ) : null;
+              })}
+            </ul> */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                paddingTop: "20px",
+              }}
+            >
+              <div
+                onClick={() => {
+                  window.open(
+                    singleProduct.dataSheetLink,
+                    "_blank"
+                  );
+                }}
+                style={{ background: "#303031" }}
+                className={`px-4 py-2 text-white text-center cursor-pointer uppercase`}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+              >
+                Product Description
+              </div>
+            </div>
+          </div>
         ) : (
           <RatingReview />
         )}

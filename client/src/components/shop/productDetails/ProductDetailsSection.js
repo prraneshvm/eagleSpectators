@@ -177,7 +177,7 @@ const ProductDetailsSection = (props) => {
               <div className="text-2xl tracking-wider">{sProduct.pName}</div>
               <div className="flex justify-between items-center">
                 <span className="text-xl tracking-wider text-yellow-700">
-                ₹ {sProduct.pPrice}.00
+                  ₹ {sProduct.pPrice}.00
                 </span>
                 <span>
                   <svg
@@ -216,7 +216,23 @@ const ProductDetailsSection = (props) => {
               </div>
             </div>
             <div className="my-4 md:my-6 text-gray-600">
-              {sProduct.pDescription} 
+              {/* {sProduct.pOverview} aaa */}
+              {/* <ul>
+                {sProduct.pOverview.split(".").map((feature, index) => {
+                  const trimmedFeature = feature.trim();
+                  return trimmedFeature ? (
+                    <li key={index}>{trimmedFeature}</li>
+                  ) : null;
+                })}
+              </ul> */}
+              <ul style={{ listStyleType: "disc", paddingLeft: "20px" }}>
+                {sProduct.pOverview.split(".").map((feature, index) => {
+                  const trimmedFeature = feature.trim();
+                  return trimmedFeature ? (
+                    <li key={index}>{trimmedFeature}</li>
+                  ) : null;
+                })}
+              </ul>
               {/* <ul>
                 {sProduct.pDescription
                   .trim()

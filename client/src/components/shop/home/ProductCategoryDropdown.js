@@ -58,6 +58,104 @@ const CategoryList = () => {
   );
 };
 
+const BrandList = () => {
+  const { data, dispatch } = useContext(HomeContext);
+
+  const [productArray, setPa] = useState(null);
+
+  const [brandsList, _setBrandsList] = useState([
+    {
+      cName: "hikvison",
+      img: "https://logos-world.net/wp-content/uploads/2023/01/Hikvision-Logo.png",
+    },
+    {
+      cName: "CP Plus",
+      img: "https://www.cpplusworld.com/assets/img/logo.png",
+    },
+  ]);
+
+  // useEffect(() => {
+  //   // fetchData();
+  // }, []);
+
+  // const fetchData = async () => {
+  //   try {
+  //     // let responseData = await getAllCategory();
+  //     let responseData = {
+  //       barnds: [
+  //         {
+  //           cName: "Hikvison",
+  //           img: "https://logos-world.net/wp-content/uploads/2023/01/Hikvision-Logo.png",
+  //         },
+  //         {
+  //           cName: "CP Plus",
+  //           img: "https://www.cpplusworld.com/assets/img/logo.png",
+  //         },
+  //       ],
+  //     };
+  //     if (responseData && responseData.barnds) {
+  //       setBrandsList(responseData.barnds);
+  //     }w
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  const searchHandle = (e) => {
+    console.log('Search www', e)
+    // setSearch(e.target.value);
+    fetchData();
+    dispatch({
+      type: "searchHandleInReducer",
+      payload: e,
+      productArray: productArray,
+    });
+  };
+
+  const fetchData = async () => {
+    dispatch({ type: "loading", payload: true });
+    try {
+      setTimeout(async () => {
+        let responseData = await getAllProduct();
+        if (responseData && responseData.Products) {
+          setPa(responseData.Products);
+          dispatch({ type: "loading", payload: false });
+        }
+      }, 700);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <div className={`${data.brandListDropDown ? "" : "hidden"} my-4`}>
+      <hr />
+      <div className="py-1 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        {brandsList && brandsList.length > 0 ? (
+          brandsList.map((item, index) => {
+            return (
+              <Fragment key={index}>
+                <div
+                  onClick={() =>
+                    // history.push(`/products/category/${item._id}`)
+                    searchHandle(item.cName)
+                  }
+                  className="col-span-1 m-2 flex flex-col items-center justify-center space-y-2 cursor-pointer"
+                >
+                  <img src={item?.img} alt="pic" />
+                  <div className="font-medium">{item.cName}</div>
+                </div>
+              </Fragment>
+            );
+          })
+        ) : (
+          <div className="text-xl text-center my-4">No Brands</div>
+        )}
+      </div>
+    </div>
+  );
+};
+
 const FilterList = () => {
   const { data, dispatch } = useContext(HomeContext);
   const [range, setRange] = useState(0);
@@ -109,7 +207,9 @@ const FilterList = () => {
           <div className="flex flex-col space-y-2  w-2/3 lg:w-2/4">
             <label htmlFor="points" className="text-sm">
               Price (between 0 and 10₹ ):{" "}
-              <span className="font-semibold text-yellow-700">{range}.00₹ </span>{" "}
+              <span className="font-semibold text-yellow-700">
+                {range}.00₹{" "}
+              </span>{" "}
             </label>
             <input
               value={range}
@@ -218,6 +318,7 @@ const ProductCategoryDropdown = (props) => {
   return (
     <Fragment>
       <CategoryList />
+      <BrandList />
       <FilterList />
       <Search />
     </Fragment>

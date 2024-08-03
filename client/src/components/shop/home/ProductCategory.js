@@ -20,7 +20,37 @@ const ProductCategory = (props) => {
           }`}
         >
           <span className="text-md md:text-lg hover:text-yellow-700">
-            Categories
+            Categories 11111
+          </span>
+          <svg
+            className="w-4 h-4 text-yellow-700"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M19 9l-7 7-7-7"
+            ></path>
+          </svg>
+        </div>
+
+        <div
+          onClick={(e) =>
+            dispatch({
+              type: "brandListDropDown",
+              payload: !data.brandListDropDown,
+            })
+          }
+          className={`flex items-center space-x-1 cursor-pointer ${
+            data.brandListDropDown ? "text-yellow-700" : ""
+          }`}
+        >
+          <span className="text-md md:text-lg hover:text-yellow-700">
+            Categories 22222
           </span>
           <svg
             className="w-4 h-4 text-yellow-700"

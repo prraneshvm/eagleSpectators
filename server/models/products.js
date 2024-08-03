@@ -11,6 +11,14 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    pOverview: {
+      type: String,
+      required: true,
+    },
+    dataSheetLink: {
+      type: String,
+      required: true,
+    },
     pPrice: {
       type: Number,
       required: true,

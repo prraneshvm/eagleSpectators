@@ -1,5 +1,6 @@
 export const homeState = {
   categoryListDropdown: false,
+  brandListDropDown: false,
   filterListDropdown: false,
   searchDropdown: false,
   products: null,
@@ -13,6 +14,15 @@ export const homeReducer = (state, action) => {
       return {
         ...state,
         categoryListDropdown: action.payload,
+        brandListDropDown: false,
+        filterListDropdown: false,
+        searchDropdown: false,
+      };
+    case "brandListDropDown":
+      return {
+        ...state,
+        categoryListDropdown: false,
+        brandListDropDown: action.payload,
         filterListDropdown: false,
         searchDropdown: false,
       };
@@ -20,6 +30,7 @@ export const homeReducer = (state, action) => {
       return {
         ...state,
         categoryListDropdown: false,
+        brandListDropDown: false,
         filterListDropdown: action.payload,
         searchDropdown: false,
       };
@@ -27,6 +38,7 @@ export const homeReducer = (state, action) => {
       return {
         ...state,
         categoryListDropdown: false,
+        brandListDropDown: false,
         filterListDropdown: false,
         searchDropdown: action.payload,
       };
