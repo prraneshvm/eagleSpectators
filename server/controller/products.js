@@ -27,11 +27,82 @@ class Product {
     }
   }
 
+//   {
+//     "category": [
+//         "Test1"
+//     ],
+//     "brand": [
+//         "Hikvison"
+//     ]
+// }
+
+// async getAllProductFilter(req, res) {
+//   let filter =
+//       req.body;
+//   try {
+//     let ProductsAll = await productModel
+//       .find({})
+//       .populate("pCategory", "_id cName")
+//       .populate("pBrand", "_id cName")
+//       .sort({ _id: -1 });
+//     console.log('@@!! products', ProductsAll)
+
+//     const Products = ProductsAll.filter(product => {
+//       return filter.category.includes(product.pCategory.cName) || 
+//              filter.brand.includes(product.pBrand.cName);
+//     });
+
+//     if (Products) {
+//       return res.json({ Products });
+//     }
+//   } catch (err) {
+//     console.log(err);
+//   }
+// }
+
+async getAllProductFilter(req, res) {
+  // Extract filter criteria from query parameters
+  const filter = {
+    category: req.query.category ? JSON.parse(req.query.category) : [],
+    brand: req.query.brand ? JSON.parse(req.query.brand) : []
+  };
+
+  try {
+    // Fetch all products and populate necessary fields
+    let ProductsAll = await productModel
+      .find({})
+      .populate("pCategory", "_id cName")
+      .populate("pBrand", "_id cName")
+      .sort({ _id: -1 });
+    
+    console.log('@@!! products', ProductsAll);
+
+    // Filter products based on provided criteria
+    const Products = ProductsAll.filter(product => {
+      return (filter.category.length === 0 || filter.category.includes(product.pCategory.cName)) && 
+             (filter.brand.length === 0 || filter.brand.includes(product.pBrand.cName));
+    });
+
+    if (Products) {
+      return res.json({ Products });
+    } else {
+      return res.json({ Products: [] });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+
+
+
+
   async getAllProduct(req, res) {
     try {
       let Products = await productModel
         .find({})
         .populate("pCategory", "_id cName")
+        .populate("pBrand", "_id cName")
         .sort({ _id: -1 });
       if (Products) {
         return res.json({ Products });
@@ -42,7 +113,7 @@ class Product {
   }
 
   async postAddProduct(req, res) {
-    let { pName, pDescription, pOverview, dataSheetLink, pPrice, pQuantity, pCategory, pOffer, pStatus } =
+    let { pName, pDescription, pOverview, dataSheetLink, pPrice, pQuantity, pCategory, pBrand, pOffer, pStatus } =
       req.body;
     let images = req.files;
     // Validation
@@ -54,6 +125,7 @@ class Product {
       !pPrice |
       !pQuantity |
       !pCategory |
+      !pBrand |
       !pOffer |
       !pStatus
     ) {
@@ -86,6 +158,7 @@ class Product {
           pPrice,
           pQuantity,
           pCategory,
+          pBrand,
           pOffer,
           pStatus,
         });
@@ -109,6 +182,7 @@ class Product {
       pPrice,
       pQuantity,
       pCategory,
+      pBrand,
       pOffer,
       pStatus,
       pImages,
@@ -125,6 +199,7 @@ class Product {
       !pPrice |
       !pQuantity |
       !pCategory |
+      !pBrand |
       !pOffer |
       !pStatus
     ) {
@@ -149,6 +224,7 @@ class Product {
         pPrice,
         pQuantity,
         pCategory,
+        pBrand,
         pOffer,
         pStatus,
       };

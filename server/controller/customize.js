@@ -1,5 +1,6 @@
 const fs = require("fs");
 const categoryModel = require("../models/categories");
+const brandsModel = require("../models/brands");
 const productModel = require("../models/products");
 const orderModel = require("../models/orders");
 const userModel = require("../models/users");
@@ -63,11 +64,12 @@ class Customize {
   async getAllData(req, res) {
     try {
       let Categories = await categoryModel.find({}).count();
+      let Brands = await brandsModel.find({}).count();
       let Products = await productModel.find({}).count();
       let Orders = await orderModel.find({}).count();
       let Users = await userModel.find({}).count();
       if (Categories && Products && Orders) {
-        return res.json({ Categories, Products, Orders, Users });
+        return res.json({ Categories, Products, Brands, Orders, Users });
       }
     } catch (err) {
       console.log(err);

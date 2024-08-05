@@ -2,15 +2,32 @@ import React, { Fragment, useContext, useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { HomeContext } from "./index";
 import { getAllCategory } from "../../admin/categories/FetchApi";
-import { getAllProduct, productByPrice } from "../../admin/products/FetchApi";
+import {
+  getAllProduct,
+  getAllProductFilter,
+  productByPrice,
+} from "../../admin/products/FetchApi";
 import "./style.css";
+import { getAllBrands } from "../../admin/brands/FetchApi";
 
 const apiURL = process.env.REACT_APP_API_URL;
 
-const CategoryList = () => {
-  const history = useHistory();
+const CategoryList = ({ setFilterState, filterState }) => {
+  // const history = useHistory();
   const { data } = useContext(HomeContext);
   const [categories, setCategories] = useState(null);
+
+  function toggleCategory(category) {
+    setFilterState((prevState) => {
+      const isCategoryPresent = prevState.category.includes(category);
+      return {
+        ...prevState,
+        category: isCategoryPresent
+          ? prevState.category.filter((b) => b !== category)
+          : [...prevState.category, category],
+      };
+    });
+  }
 
   useEffect(() => {
     fetchData();
@@ -37,13 +54,29 @@ const CategoryList = () => {
               <Fragment key={index}>
                 <div
                   onClick={(e) =>
-                    history.push(`/products/category/${item._id}`)
+                    // history.push(`/products/category/${item._id}`)
+                    toggleCategory(item.cName)
                   }
                   className="col-span-1 m-2 flex flex-col items-center justify-center space-y-2 cursor-pointer"
                 >
+                  {filterState.category.includes(item.cName) && (
+                    <div style={{ position: "absolute" }}>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="64"
+                        height="64"
+                        fill="currentColor"
+                        class="bi bi-check2-all"
+                        viewBox="0 0 16 16"
+                      >
+                        <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0" />
+                      </svg>
+                    </div>
+                  )}
                   <img
                     src={`${apiURL}/uploads/categories/${item.cImage}`}
                     alt="pic"
+                    style={{ opacity: filterState.category.includes(item.cName) ? '0.8' : ''}}
                   />
                   <div className="font-medium">{item.cName}</div>
                 </div>
@@ -58,70 +91,33 @@ const CategoryList = () => {
   );
 };
 
-const BrandList = () => {
-  const { data, dispatch } = useContext(HomeContext);
+const BrandList = ({ setFilterState, filterState }) => {
+  // const history = useHistory();
+  const { data } = useContext(HomeContext);
+  const [brands, setBrands] = useState(null);
 
-  const [productArray, setPa] = useState(null);
-
-  const [brandsList, _setBrandsList] = useState([
-    {
-      cName: "hikvison",
-      img: "https://logos-world.net/wp-content/uploads/2023/01/Hikvision-Logo.png",
-    },
-    {
-      cName: "CP Plus",
-      img: "https://www.cpplusworld.com/assets/img/logo.png",
-    },
-  ]);
-
-  // useEffect(() => {
-  //   // fetchData();
-  // }, []);
-
-  // const fetchData = async () => {
-  //   try {
-  //     // let responseData = await getAllCategory();
-  //     let responseData = {
-  //       barnds: [
-  //         {
-  //           cName: "Hikvison",
-  //           img: "https://logos-world.net/wp-content/uploads/2023/01/Hikvision-Logo.png",
-  //         },
-  //         {
-  //           cName: "CP Plus",
-  //           img: "https://www.cpplusworld.com/assets/img/logo.png",
-  //         },
-  //       ],
-  //     };
-  //     if (responseData && responseData.barnds) {
-  //       setBrandsList(responseData.barnds);
-  //     }w
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  const searchHandle = (e) => {
-    console.log('Search www', e)
-    // setSearch(e.target.value);
-    fetchData();
-    dispatch({
-      type: "searchHandleInReducer",
-      payload: e,
-      productArray: productArray,
+  function toggleBrand(brand) {
+    setFilterState((prevState) => {
+      const isBrandPresent = prevState.brand.includes(brand);
+      return {
+        ...prevState,
+        brand: isBrandPresent
+          ? prevState.brand.filter((b) => b !== brand)
+          : [...prevState.brand, brand],
+      };
     });
-  };
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const fetchData = async () => {
-    dispatch({ type: "loading", payload: true });
     try {
-      setTimeout(async () => {
-        let responseData = await getAllProduct();
-        if (responseData && responseData.Products) {
-          setPa(responseData.Products);
-          dispatch({ type: "loading", payload: false });
-        }
-      }, 700);
+      let responseData = await getAllBrands();
+      if (responseData && responseData.brands) {
+        setBrands(responseData.brands);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -131,19 +127,37 @@ const BrandList = () => {
     <div className={`${data.brandListDropDown ? "" : "hidden"} my-4`}>
       <hr />
       <div className="py-1 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {brandsList && brandsList.length > 0 ? (
-          brandsList.map((item, index) => {
+        {brands && brands.length > 0 ? (
+          brands.map((item, index) => {
             return (
               <Fragment key={index}>
                 <div
-                  onClick={() =>
-                    // history.push(`/products/category/${item._id}`)
-                    searchHandle(item.cName)
+                  onClick={(e) =>
+                    // history.push(`/products/brands/${item._id}`)
+                    toggleBrand(item.cName)
                   }
                   className="col-span-1 m-2 flex flex-col items-center justify-center space-y-2 cursor-pointer"
                 >
-                  <img src={item?.img} alt="pic" />
-                  <div className="font-medium">{item.cName}</div>
+                  {filterState.brand.includes(item.cName) && (
+                    <div style={{ position: "absolute" }}>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="64"
+                        height="64"
+                        fill="currentColor"
+                        class="bi bi-check2-all"
+                        viewBox="0 0 16 16"
+                      >
+                        <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0" />
+                      </svg>
+                    </div>
+                  )}
+                  <img
+                    src={`${apiURL}/uploads/brands/${item.cImage}`}
+                    alt="pic"
+                    style={{ opacity: filterState.brand.includes(item.cName) ? '0.8' : ''}}
+                  />
+                  {/* <div className="font-medium">{item.cName}</div> */}
                 </div>
               </Fragment>
             );
@@ -315,10 +329,39 @@ const Search = () => {
 };
 
 const ProductCategoryDropdown = (props) => {
+  const { dispatch } = useContext(HomeContext);
+
+  const [filterState, setFilterState] = useState({
+    category: [],
+    brand: [],
+  });
+
+  console.log("@@!!!!! filter", filterState);
+
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterState]);
+
+  const fetchData = async () => {
+    dispatch({ type: "loading", payload: true });
+    try {
+      let responseData = await getAllProductFilter(filterState);
+      setTimeout(() => {
+        if (responseData && responseData.Products) {
+          dispatch({ type: "setProducts", payload: responseData.Products });
+          dispatch({ type: "loading", payload: false });
+        }
+      }, 500);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Fragment>
-      <CategoryList />
-      <BrandList />
+      <CategoryList setFilterState={setFilterState} filterState={filterState} />
+      <BrandList setFilterState={setFilterState} filterState={filterState} />
       <FilterList />
       <Search />
     </Fragment>

@@ -10,6 +10,24 @@ export const getAllProduct = async () => {
   }
 };
 
+export const getAllProductFilter = async (reqBody) => {
+  const params = new URLSearchParams();
+    if (reqBody.category && reqBody.category.length > 0) {
+      params.append('category', JSON.stringify(reqBody.category));
+    }
+    if (reqBody.brand && reqBody.brand.length > 0) {
+      params.append('brand', JSON.stringify(reqBody.brand));
+    }
+  try {
+    let res = await axios.get(`${apiURL}/api/product/all-product-filter`, {
+      params: params
+    });
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const createPorductImage = async ({ pImage }) => {
   /* Most important part for uploading multiple image  */
   let formData = new FormData();
@@ -27,6 +45,7 @@ export const createProduct = async ({
   pImage,
   pStatus,
   pCategory,
+  pBrand,
   pQuantity,
   pPrice,
   pOffer,
@@ -43,6 +62,7 @@ export const createProduct = async ({
   formData.append("dataSheetLink", dataSheetLink);
   formData.append("pStatus", pStatus);
   formData.append("pCategory", pCategory);
+  formData.append("pBrand", pBrand);
   formData.append("pQuantity", pQuantity);
   formData.append("pPrice", pPrice);
   formData.append("pOffer", pOffer);
@@ -70,6 +90,7 @@ export const editProduct = async (product) => {
   formData.append("pDescription", product.pDescription);
   formData.append("pStatus", product.pStatus);
   formData.append("pCategory", product.pCategory._id);
+  formData.append("pBrand", product.pBrand._id);
   formData.append("pQuantity", product.pQuantity);
   formData.append("pPrice", product.pPrice);
   formData.append("pOffer", product.pOffer);

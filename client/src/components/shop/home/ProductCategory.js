@@ -7,7 +7,7 @@ const ProductCategory = (props) => {
 
   return (
     <Fragment>
-      <div className="flex justify-between font-medium">
+      <div className="flex justify-end gap-10 font-medium">
         <div
           onClick={(e) =>
             dispatch({
@@ -20,7 +20,7 @@ const ProductCategory = (props) => {
           }`}
         >
           <span className="text-md md:text-lg hover:text-yellow-700">
-            Categories 11111
+            Category
           </span>
           <svg
             className="w-4 h-4 text-yellow-700"
@@ -50,7 +50,7 @@ const ProductCategory = (props) => {
           }`}
         >
           <span className="text-md md:text-lg hover:text-yellow-700">
-            Categories 22222
+            Brands
           </span>
           <svg
             className="w-4 h-4 text-yellow-700"

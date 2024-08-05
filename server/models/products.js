@@ -35,6 +35,10 @@ const productSchema = new mongoose.Schema(
       type: ObjectId,
       ref: "categories",
     },
+    pBrand: {
+      type: ObjectId,
+      ref: "brands",
+    },
     pImages: {
       type: Array,
       required: true,

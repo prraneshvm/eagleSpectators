@@ -27,6 +27,7 @@ const cors = require("cors");
 // Import Router
 const authRouter = require("./routes/auth");
 const categoryRouter = require("./routes/categories");
+const brandsRouter = require("./routes/brands");
 const productRouter = require("./routes/products");
 const brainTreeRouter = require("./routes/braintree");
 const orderRouter = require("./routes/orders");
@@ -65,6 +66,7 @@ app.use(express.json());
 app.use("/api", authRouter);
 app.use("/api/user", usersRouter);
 app.use("/api/category", categoryRouter);
+app.use("/api/brands", brandsRouter);
 app.use("/api/product", productRouter);
 app.use("/api", brainTreeRouter);
 app.use("/api/order", orderRouter);

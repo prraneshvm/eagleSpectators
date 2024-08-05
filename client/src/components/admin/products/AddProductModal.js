@@ -2,8 +2,9 @@ import React, { Fragment, useContext, useState, useEffect } from "react";
 import { ProductContext } from "./index";
 import { createProduct, getAllProduct } from "./FetchApi";
 import { getAllCategory } from "../categories/FetchApi";
+import { getAllBrands } from "../brands/FetchApi";
 
-const AddProductDetail = ({ categories }) => {
+const AddProductDetail = ({ categories, brands }) => {
   const { data, dispatch } = useContext(ProductContext);
 
   const alert = (msg, type) => (
@@ -18,6 +19,7 @@ const AddProductDetail = ({ categories }) => {
     pStatus: "Active",
     pImage: null, // Initial value will be null or empty array
     pCategory: "",
+    pBrand: "",
     pPrice: "",
     pOffer: 0,
     pQuantity: "",
@@ -61,6 +63,7 @@ const AddProductDetail = ({ categories }) => {
           pImage: "",
           pStatus: "Active",
           pCategory: "",
+          pBrand: "",
           pPrice: "",
           pQuantity: "",
           pOffer: 0,
@@ -77,6 +80,7 @@ const AddProductDetail = ({ categories }) => {
             pImage: "",
             pStatus: "Active",
             pCategory: "",
+            pBrand: "",
             pPrice: "",
             pQuantity: "",
             pOffer: 0,
@@ -237,9 +241,9 @@ const AddProductDetail = ({ categories }) => {
               />
             </div>
 
-            <div className="flex flex-col space-y-2">
-              <label htmlFor="description">Brand *</label>
-              <textarea
+            <div className="w-1/2 flex flex-col space-y-1">
+              <label htmlFor="status">Product Brand *</label>
+              <select
                 value={fData.pBrand}
                 onChange={(e) =>
                   setFdata({
@@ -249,12 +253,23 @@ const AddProductDetail = ({ categories }) => {
                     pBrand: e.target.value,
                   })
                 }
+                name="status"
                 className="px-4 py-2 border focus:outline-none"
-                name="Brand"
-                id="pBrand"
-                cols={3}
-                rows={1}
-              />
+                id="status"
+              >
+                <option disabled value="">
+                  Select a brand
+                </option>
+                {brands.length > 0
+                  ? brands.map(function (elem) {
+                      return (
+                        <option name="status" value={elem._id} key={elem._id}>
+                          {elem.cName}
+                        </option>
+                      );
+                    })
+                  : ""}
+              </select>
             </div>
             {/* Most Important part for uploading multiple image */}
             <div className="flex flex-col mt-4">
@@ -388,9 +403,11 @@ const AddProductDetail = ({ categories }) => {
 const AddProductModal = (props) => {
   useEffect(() => {
     fetchCategoryData();
+    fetchBrandData();
   }, []);
 
   const [allCat, setAllCat] = useState({});
+  const [allBrand, setAllBrand] = useState({});
 
   const fetchCategoryData = async () => {
     let responseData = await getAllCategory();
@@ -399,9 +416,17 @@ const AddProductModal = (props) => {
     }
   };
 
+  const fetchBrandData = async () => {
+    let responseData = await getAllBrands();
+    console.log('@@!! brands', responseData)
+    if (responseData.brands) {
+      setAllBrand(responseData.brands);
+    }
+  };
+
   return (
     <Fragment>
-      <AddProductDetail categories={allCat} />
+      <AddProductDetail categories={allCat} brands={allBrand} />
     </Fragment>
   );
 };
